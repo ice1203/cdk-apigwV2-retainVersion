@@ -5,7 +5,6 @@ import * as cforigins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as apigw from "aws-cdk-lib/aws-apigatewayv2";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
-import "dotenv/config";
 
 export interface ApigwStageProps {
   stageName: string;
@@ -40,6 +39,7 @@ export class CdkApigwStack extends cdk.Stack {
     });*/
     // IAM Role
     const roleForGithubAction = new iam.Role(this, "RoleForGithubAction", {
+      roleName: "my-githubactions-role",
       assumedBy: new iam.WebIdentityPrincipal(
         `arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`,
         {
@@ -121,15 +121,6 @@ export class CdkApigwStack extends cdk.Stack {
       autoDeploy: true,
       stageVariables: this.stagev2.stageVariables,
     });
-
-    // add Lambda resource base policy
-    //myLambda.currentVersion.addPermission("myFunctionPermission", {
-    //  principal: new iam.ServicePrincipal("apigateway.amazonaws.com"),
-    //  action: "lambda:InvokeFunction",
-    //  sourceArn: `arn:aws:execute-api:${cdk.Stack.of(this).region}:${
-    //    cdk.Stack.of(this).account
-    //  }:${httpApi.ref}/*/*/*`,
-    //});
 
     // CloudFront distribution
     const myDistribution = new cloudfront.Distribution(this, "MyDistribution", {
