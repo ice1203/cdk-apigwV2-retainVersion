@@ -18,6 +18,6 @@ def respond(err, res=None):
 
 def handler(event, context):
     json_data = {
-        "res": "OKv3",
+        "res": "OKv4",
     }
     return respond(None, json_data)
