@@ -23,6 +23,12 @@ export class CdkApigwStack extends cdk.Stack {
       ["lambdaVersion"]: "2",
     },
   };
+  private stagev3: ApigwStageProps = {
+    stageName: "v3",
+    stageVariables: {
+      ["lambdaVersion"]: "3",
+    },
+  };
   // 使用するgithubリポジトリに応じて以下書き換え
   private gitHubOwner: string = "ice1203";
   private repositoryName: string = "cdk-apigwV2-retainVersion";
@@ -120,6 +126,12 @@ export class CdkApigwStack extends cdk.Stack {
       stageName: this.stagev2.stageName,
       autoDeploy: true,
       stageVariables: this.stagev2.stageVariables,
+    });
+    const apigwStageV3 = new apigw.CfnStage(this, "apigwStageV3", {
+      apiId: httpApi.ref,
+      stageName: this.stagev3.stageName,
+      autoDeploy: true,
+      stageVariables: this.stagev3.stageVariables,
     });
 
     // CloudFront distribution
