@@ -5,6 +5,7 @@ import * as cforigins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as apigw from "aws-cdk-lib/aws-apigatewayv2";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as s3 from "aws-cdk-lib/aws-s3";
 
 export interface ApigwStageProps {
     stageName: string;
@@ -31,6 +32,16 @@ export class CdkApigwStack extends cdk.Stack {
       thumbprints: ["6938fd4d98bab03faadb97b34396831e3780aea1"],
       clientIds: ["sts.amazonaws.com"],
     });*/
+
+        // s3静的サイトホスティング
+        const myBucket = new s3.Bucket(this, "MyBucket", {
+            websiteIndexDocument: "index.html",
+            websiteErrorDocument: "error.html",
+            publicReadAccess: true,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+        });
+
         // IAM Role
         const roleForGithubAction = new iam.Role(this, "RoleForGithubAction", {
             roleName: "my-githubactions-role",
