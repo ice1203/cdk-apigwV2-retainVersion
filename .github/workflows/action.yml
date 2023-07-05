@@ -56,4 +56,4 @@ jobs:
       - name: api document deploy
         if: contains(github.event_name, 'push')
         run: |
-          aws s3 cp redoc-cli.out/index.html ${{ secrets.S3_BUCKET_NAME }}
+          aws s3 cp redoc-cli.out/index.html s3://${{ secrets.S3_BUCKET_NAME }}/
